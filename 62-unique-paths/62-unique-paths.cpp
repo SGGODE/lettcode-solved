@@ -22,7 +22,22 @@ public:
             s=s*(N-r+i)/i;
         }
         return (int)s;*/
-        vector<vector<int>>dp(m,vector<int>(n,-1));
-        return get(dp,m-1,n-1);
+        int dp[m][n];
+        //vector<vector<int>>dp(m,vector<int>(n,0));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 &&j==0)dp[i][j]=1;
+                else{
+                int left=0,right=0;
+                if(i>0)
+                  left=dp[i-1][j];
+                if(j>0)
+                  right=dp[i][j-1];
+                dp[i][j]=left+right;
+             }
+            }
+        }
+        //return get(dp,m-1,n-1);
+        return dp[m-1][n-1];
     }
 };
