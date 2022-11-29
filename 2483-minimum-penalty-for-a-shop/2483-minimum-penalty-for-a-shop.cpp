@@ -20,13 +20,14 @@ public:
         //     }
         // }
         // return index;
-        int cnt=0;int micnt=0;
+        int cnt=0;//int micnt=0;
         for(int i=0;i<n;i++){
             if(customers[i]=='Y')cnt++;
         }
          int mincnt=cnt;
         for(int i=0;i<n;i++){
-            cnt+= customers[i]=='Y' ? -1:1;
+            if(customers[i]=='N')++cnt;
+            else --cnt;
             if(cnt<mincnt){
                 mincnt=cnt;
                 index=i+1;
