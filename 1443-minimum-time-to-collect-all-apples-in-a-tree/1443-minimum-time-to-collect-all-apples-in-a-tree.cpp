@@ -1,35 +1,29 @@
-// class Solution {
-// public:
-//     int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
-        
-//     }
-// };
 class Solution {
-public:
-    int dfs(vector<int> adj[],int n,int node,int prev,vector<bool> &hasApple){
-        int tree = 0;
-        for(auto &ele:adj[node]){
-            if(ele!=prev){
-                int subtree = dfs(adj,n,ele,node,hasApple);
-                tree += subtree;
-            }
+private:
+    int dfs(vector<int>adj[],int index,int sum,vector<bool>& hasApple,vector<bool>&vis){
+        if(vis[index])return 0;
+        vis[index]=1;
+        int cost=0;
+        for(auto it:adj[index]){
+            // if(hasApple[it]==1&&!vis[it]){
+            //     ++sum;
+            // }
+            // if(!vis[it])
+            cost+= dfs(adj,it,2,hasApple,vis);
         }
-        if(adj[node].size()==1 and node!=0){
-            tree += hasApple[node];
-        }
-        else if(node!=0){
-            if(tree!=0 or hasApple[node]) tree++; 
-        }
-        return tree;
+        if(hasApple[index]==0&&cost==0)return 0;
+        return sum+cost;
     }
-    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple){
-        int sz = hasApple.size();
-        vector<int> adj[sz];
-        for(auto &ele:edges){
-            adj[ele[0]].push_back(ele[1]);
-            adj[ele[1]].push_back(ele[0]);
-        }
-        int req = dfs(adj,n,0,-1,hasApple);
-        return 2*req;
+public:
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+       vector<int>adj[n];
+       for(int i=0;i<edges.size();i++){
+           adj[edges[i][0]].push_back(edges[i][1]);
+           adj[edges[i][1]].push_back(edges[i][0]);
+       }
+       int sum=0;
+       vector<bool>vis(n,0);
+      return dfs(adj,0,sum,hasApple,vis);
+       return 2*sum;
     }
 };
