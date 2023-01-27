@@ -1,15 +1,18 @@
 class Solution {
 private:
-    bool dfs(string s,unordered_map<string,int>&mp){
+    bool dfs(string s,unordered_map<string,int>&mp,unordered_map<string,bool>&dp){
         int n=s.size();
+        if(dp[s])return dp[s];
         for(int i=1;i<n;i++){
             string f=s.substr(0,i);
             string se=s.substr(i,n);
-            if((mp.find(f)!=mp.end()&&mp.find(se)!=mp.end())||(mp.find(f)!=mp.end()&&dfs(se,mp))){
-                return 1;
+            if((mp.find(f)!=mp.end()&&mp.find(se)!=mp.end())||(mp.find(f)!=mp.end()&&dfs(se,mp,dp))){
+                dp[s]=1;
+                return dp[s];
             }
         }
-        return 0;
+        dp[s]=0;
+        return dp[s];
     }
 public:
     vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
@@ -31,8 +34,9 @@ public:
         //     if(cnt>=2)v.push_back(words[i]);
         //      mp[words[i]]++;
         // }
+        unordered_map<string,bool>dp;
         for(int i=0;i<n;i++){
-            if(dfs(words[i],mp)){
+            if(dfs(words[i],mp,dp)){
                 v.push_back(words[i]);
             }
         }
