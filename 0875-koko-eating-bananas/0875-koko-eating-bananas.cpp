@@ -17,27 +17,13 @@ private:
     }
 public:
     int minEatingSpeed(vector<int>& piles, int h) {
-       //  int n=piles.size();
-       //  if(n==1)return piles[0];
-       //  if(n==h){
-       //      return *max_element(piles.begin(),piles.end());
-       //  }
-       //  int m=*min_element(piles.begin(),piles.end());
-       //  while(1){
-       //     if(check(piles,m,h)){
-       //         return m;
-       //     }
-       //  ++m;
-       // }
-       // return m;
-        int s=1;
+         int s=1;
         int e=1000000000;
         while(s<e){
-          long long  int total=0;
             int mid=(s+e)/2;
+            int total=0;
             for(auto it:piles){
-              long long int x=(it+mid-1)/mid;
-                total+=x;
+                total+=(it+mid-1)/mid;
             }
             if(total>h){
                 s=mid+1;
