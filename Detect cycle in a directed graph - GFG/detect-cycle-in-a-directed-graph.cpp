@@ -26,12 +26,32 @@ private:
         // code here
        vector<bool>vis(V,0);
        vector<bool>pathvis(V,0);
+       vector<int>indegree(V,0);
       for(int i=0;i<V;i++){
-          if(!vis[i]){
-             if(dfs(adj,vis,pathvis,i))return 1;
+         for(auto it:adj[i]){
+             indegree[it]++;
+         }
+      }
+      queue<int>pq;
+      for(int i=0;i<V;i++){
+          if(indegree[i]==0){
+              pq.push(i);
           }
       }
-       return 0;
+    //   for(auto it:indegree)cout<<it<<" ";
+    //   cout<<endl;
+      vector<int>res;
+      while(!pq.empty()){
+          int x=pq.front();
+          pq.pop();
+          res.push_back(x);
+          for(auto it:adj[x]){
+              --indegree[it];
+              if(indegree[it]==0)pq.push(it);
+          }
+      }
+      
+       return res.size()!=V;
     }
 };
 
