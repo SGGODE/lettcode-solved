@@ -22,17 +22,20 @@ class Solution
                 }
             }
         }
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+      queue<pair<int,int>>pq;
+      set<pair<int,int>>s;
+      s.insert({0,S});
         pq.push({0,S});
         res[S]=0;
-        while(!pq.empty()){
-            int temp=pq.top().second;
-            int time=pq.top().first;
-            pq.pop();
+        while(!s.empty()){
+            auto it = *(s.begin());
+            int temp=it.second;
+            int time=it.first;
+            s.erase(it);
             for(auto it:dumpadj[temp]){
                 if(res[it.first]>res[temp]+it.second){
                     res[it.first]=res[temp]+it.second;
-                    pq.push({res[it.first],it.first});
+                    s.insert({it.second,it.first});
                 }
             }
         }
