@@ -14,27 +14,27 @@ class Solution {
     */
     vector<int> bellman_ford(int V, vector<vector<int>>& edges, int s) {
         // Code here
-        vector<int>res(V,1e8);
-        res[s]=0;
-        for(int i=0;i<V-1;i++){
-            for(auto it:edges){
-                int u=it[0];
-                int v=it[1];
-                int wt=it[2];
-                if(res[u]!=1e8&&res[u]+wt<res[v]){
-                    res[v]=res[u]+wt;
-                }
-            }
-        }
-        for(auto it:edges){
+      vector<int>res(V,1e8);
+      res[s]=0;
+      for(int i=0;i<V-1;i++){
+          for(auto it:edges){
+              int u=it[0];
+              int v=it[1];
+              int wt=it[2];
+              if(res[u]!=1e8&&res[u]+wt<res[v]){
+                  res[v]=res[u]+wt;
+              }
+          }
+      }
+      for(auto it:edges){
              int u=it[0];
-                int v=it[1];
-                int wt=it[2];
-                if(res[u]!=1e8&&res[u]+wt<res[v]){
-                   return {-1};
-                }
-        }
-        return res;
+              int v=it[1];
+              int wt=it[2];
+              if(res[u]!=1e8&&res[u]+wt<res[v]){
+                  return {-1};
+              }
+      }
+      return res;
     }
 };
 
