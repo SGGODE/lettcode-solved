@@ -1,28 +1,25 @@
 class Solution {
 public:
     bool isValid(string s) {
-       // for(int i=0;i<s.size();i++){
-       //     if(s[i]=='('&&s[i+1]==')'){
-       //         i+=1;continue;
-       //     }else if(s[i]=='{'&&s[i+1]=='}'){
-       //         i+=1;
-       //         continue;
-       //     }else if(s[i]=='['&&s[i+1]==']'){
-       //         i+=1;
-       //         continue;
-       //     }else return 0;
-       // }
-       //  return 1;
-         stack<char> p;
-        unordered_map<char,char> mp={{'(',')'},{'[',']'},{'{','}'}};
-        for(char c:s){
-            if(mp.find(c)!=mp.end())
-                 p.push(c);
-            else if(!p.empty()&&mp[p.top()]==c)
-                 p.pop();
-            else
-                return false;
+        stack<char>st;
+        for(int i=0;i<s.size();i++){
+            if(st.size()==0)st.push(s[i]);
+            else{
+                if(s[i]=='}'){
+                    if(st.top()!='{')return 0;
+                    st.pop();
+                }
+               else if(s[i]==')'){
+                    if(st.top()!='(')return 0;
+                    st.pop();
+                }
+               else if(s[i]==']'){
+                    if(st.top()!='[')return 0;
+                    st.pop();
+                }
+              else st.push(s[i]);
+            }
         }
-        return p.empty();
+        return st.empty();
     }
 };
