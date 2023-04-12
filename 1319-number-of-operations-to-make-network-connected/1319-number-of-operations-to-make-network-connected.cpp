@@ -1,3 +1,32 @@
+// class Disjointset{
+//   vector<int>parent,rank;
+//    public:
+//     Disjointset(int n){
+//         parent.resize(n+1);
+//         rank.resize(n+1,0);
+//         for(int i=0;i<=n;i++){
+//             parent[i]=i;
+//         }
+//     }
+//     int par(int root){
+//         if(root==parent[root])return root;
+//         return parent[root]=par(parent[root]);
+//     }
+//     void unionrank(int u,int v){
+//         int pu=par(u);
+//         int pv=par(v);
+//         if(pu==pv)return;
+//         else if(rank[pu]>rank[pv]){
+//             parent[pv]=pu;
+//         }
+//         else if(rank[pv]>rank[pu]){
+//             parent[pu]=pv;
+//         }else{
+//             parent[pu]=pv;
+//             rank[pv]++;
+//         }
+//     }
+// };
 class DisjointSet {
     vector<int> rank, parent, size; 
 public: 
@@ -11,15 +40,15 @@ public:
         }
     }
 
-    int findUPar(int node) {
+    int par(int node) {
         if(node == parent[node])
             return node; 
-        return parent[node] = findUPar(parent[node]); 
+        return parent[node] = par(parent[node]); 
     }
 
-    void unionByRank(int u, int v) {
-        int ulp_u = findUPar(u); 
-        int ulp_v = findUPar(v); 
+    void unionrank(int u, int v) {
+        int ulp_u = par(u); 
+        int ulp_v = par(v); 
         if(ulp_u == ulp_v) return; 
         if(rank[ulp_u] < rank[ulp_v]) {
             parent[ulp_u] = ulp_v; 
@@ -33,74 +62,56 @@ public:
         }
     }
 
-    void unionBySize(int u, int v) {
-        int ulp_u = findUPar(u); 
-        int ulp_v = findUPar(v); 
-        if(ulp_u == ulp_v) return; 
-        if(size[ulp_u] < size[ulp_v]) {
-            parent[ulp_u] = ulp_v; 
-            size[ulp_v] += size[ulp_u]; 
-        }
-        else {
-            parent[ulp_v] = ulp_u;
-            size[ulp_u] += size[ulp_v]; 
-        }
-    }
+    // void unionBySize(int u, int v) {
+    //     int ulp_u = findUPar(u); 
+    //     int ulp_v = findUPar(v); 
+    //     if(ulp_u == ulp_v) return; 
+    //     if(size[ulp_u] < size[ulp_v]) {
+    //         parent[ulp_u] = ulp_v; 
+    //         size[ulp_v] += size[ulp_u]; 
+    //     }
+    //     else {
+    //         parent[ulp_v] = ulp_u;
+    //         size[ulp_u] += size[ulp_v]; 
+    //     }
+    // }
     friend class Soluction;
-}; 
-// int main() {
-//     DisjointSet ds(7);
-//     ds.unionBySize(1, 2); 
-//     ds.unionBySize(2, 3); 
-//     ds.unionBySize(4, 5); 
-//     ds.unionBySize(6, 7); 
-//     ds.unionBySize(5, 6); 
-//     // if 3 and 7 same or not 
-//     if(ds.findUPar(3) == ds.findUPar(7)) {
-//         cout << "Same\n"; 
-//     }
-//     else cout << "Not same\n"; 
-
-//     ds.unionBySize(3, 7); 
-
-//     if(ds.findUPar(3) == ds.findUPar(7)) {
-//         cout << "Same\n"; 
-//     }
-//     else cout << "Not same\n"; 
-// 	return 0;
-// }
+};
 class Solution {
 private:
-     void check(int start,vector<int>adj[],vector<bool>&vis){
-         if(vis[start])return;
-         vis[start]=1;
-         for(auto it:adj[start]){
-             check(it,adj,vis);
+     void dfs(vector<int>adj[],vector<bool>&vis,int src){
+         vis[src]=1;
+         for(auto it:adj[src]){
+             if(!vis[it]){
+                 dfs(adj,vis,it);
+             }
          }
      }
 public:
-    int makeConnected(int n, vector<vector<int>>& connections) { 
-        vector<int>adj[n+1];
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        int cnt=0;
+        DisjointSet ds(n);
+        for(int i=0;i<connections.size();i++){
+            if(ds.par(connections[i][0])==ds.par(connections[i][1])){
+                ++cnt;
+            }else ds.unionrank(connections[i][0],connections[i][1]);
+        }
+        vector<int>adj[n];
         for(int i=0;i<connections.size();i++){
             adj[connections[i][0]].push_back(connections[i][1]);
             adj[connections[i][1]].push_back(connections[i][0]);
         }
-        DisjointSet ds(n);
-        int extra=0;
-        for(int i=0;i<connections.size();i++){
-            if(ds.findUPar(connections[i][0])==ds.findUPar(connections[i][1]))++extra;
-            ds.unionBySize(connections[i][0],connections[i][1]);
-        }
         vector<bool>vis(n,0);
-        check(0,adj,vis);
-        int cnt=0;
+        int curr=0;
         for(int i=0;i<n;i++){
             if(!vis[i]){
-                ++cnt;
-                check(i,adj,vis);
+                ++curr;
+                dfs(adj,vis,i);
             }
         }
-        if(cnt<=extra)return cnt;
+        cout<<curr<<endl;
+        cout<<cnt<<endl;
+        if((curr-1)<=cnt)return curr-1;
         return -1;
     }
 };
