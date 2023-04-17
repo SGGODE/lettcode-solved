@@ -1,20 +1,18 @@
 class Solution {
 public:
     int rob(vector<int>& nums) {
-        int maxmoney=0;
         int n=nums.size();
-        vector<int>dp(n,-2);
-        if(n==1||n==2)return *max_element(nums.begin(),nums.end()); 
-        dp[0]=nums[0];dp[1]=nums[1];
+        if(n==1)return nums[0];
+        vector<int>dp(n,-1);
+        dp[0]=nums[0];
+        dp[1]=nums[1];
         for(int i=2;i<n;i++){
-            int money=0;
-            dp[i]=nums[i];
+            int ans=INT_MIN;
             for(int j=i-2;j>=0;j--){
-                money=max(money,dp[j]);
+                ans=max(ans,nums[i]+dp[j]);
             }
-            dp[i]+=money;
+            dp[i]=ans;
         }
-        int m=*max_element(dp.begin(),dp.end());
-        return m;
+        return *max_element(dp.begin(),dp.end());
     }
 };
