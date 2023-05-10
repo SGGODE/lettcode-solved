@@ -1,35 +1,33 @@
 class SummaryRanges {
 public:
-    set<int>mp;
     SummaryRanges() {
         
     }
-    
+    map<int,int>mp;
     void addNum(int value) {
-        mp.insert(value);
+        mp[value]++;
     }
     
     vector<vector<int>> getIntervals() {
-        vector<int>v(mp.begin(),mp.end());
-        //for(auto)
-        vector<vector<int>>result;
-        int j=v[0];
-        int start=j;
-        if(v.size()==1){
-            return {{v[0],v[0]}};
+        if(mp.empty())return {};
+        vector<vector<int>>res;
+        vector<int>v;
+        for(auto &it:mp){
+            v.push_back(it.first);
         }
+        int start=v[0];
+        int temp=v[0];
         for(int i=1;i<v.size();i++){
-            if(v[i]==j+1){
-                j=v[i];
-               // continue;
+            if(temp+1==v[i]){
+                temp=v[i];
             }else{
-                result.push_back({start,j});
+                res.push_back({start,temp});
                 start=v[i];
-                j=v[i];
+                temp=v[i];
             }
         }
-        result.push_back({start,j});
-        return result;
+        res.push_back({start,temp});
+        return res;
     }
 };
 
