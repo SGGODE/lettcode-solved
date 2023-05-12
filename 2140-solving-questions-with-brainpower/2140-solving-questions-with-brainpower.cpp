@@ -18,7 +18,7 @@ public:
     long long mostPoints(vector<vector<int>>& questions) {
        int n=questions.size();
        vector<long long int>dp(n,-1);
-        return solve(questions,0,n,0,dp);
+      solve(questions,0,n,0,dp);
        //  long long int res=INT_MIN;
        //  for(int i=n-1;i>=0;i--){
        //     long long int sum=questions[i][0];
@@ -32,7 +32,7 @@ public:
        //     res=max(res,dp[i]);
        //  }
        //  return res;
-        //return *max_element(dp.begin(),dp.end());
+        return *max_element(dp.begin(),dp.end());
       // return maxsum;
     }
 };
