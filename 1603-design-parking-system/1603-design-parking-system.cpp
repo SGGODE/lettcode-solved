@@ -1,21 +1,19 @@
 class ParkingSystem {
 public:
-    int b=0,m=0,s=0;
+    map<int,int>mp;
     ParkingSystem(int big, int medium, int small) {
-       b=big;m=medium;s=small; 
+        mp[1]=big;
+        mp[2]=medium;
+        mp[3]=small;
     }
     
     bool addCar(int carType) {
-       if(carType==1&&b>0){
-           --b;
-           return 1;
-       }else if(carType==3&&s>0){
-           --s;
-           return 1;
-       }else if(carType==2&&m>0){
-           --m;
-           return 1;
-       }
+        if(mp[carType]==0)mp.erase(carType);
+        if(mp.count(carType)){
+            --mp[carType];
+            if(mp[carType]==0)mp.erase(carType);
+            return 1;
+        }
         return 0;
     }
 };
