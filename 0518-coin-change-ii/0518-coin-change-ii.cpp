@@ -1,7 +1,7 @@
 class Solution {
 private:
     int combinations(vector<int>&coins,vector<vector<int>>&dp,int sum,int index){
-        //if(sum==0)return 1;
+        if(sum==0)return 1;
         if(index==0){
             if(sum%coins[index]==0)return 1;
             return 0;
