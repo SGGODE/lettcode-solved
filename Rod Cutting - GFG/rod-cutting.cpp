@@ -10,26 +10,24 @@ using namespace std;
 
 class Solution{
 private:
-    int fun(int price[],int index,int n,vector<vector<int>>&dp){
-        if(index==0){
-            if(n>=1)return price[0]*n;
-            return 0;
-        }
-        if(dp[index][n]!=-1)return dp[index][n];
-        int nottake=0+fun(price,index-1,n,dp);
-        int take=INT_MIN;
-        if(index+1<=n){
-            take=price[index]+fun(price,index,n-(index+1),dp);
-        }
-        return dp[index][n]=max(nottake,take);
-    }
+   int combination(int prices[],vector<vector<int>>&dp,int sum,int index){
+       if(sum==0)return 0;
+       if(index==0){
+           return sum*prices[0];
+       }
+       if(dp[index+1][sum]!=-1)return dp[index+1][sum];
+       int notpick=combination(prices,dp,sum,index-1);
+       int pick=0;
+       if(sum>=index+1){
+           pick=prices[index]+combination(prices,dp,sum-(index+1),index);
+       }
+       return dp[index+1][sum]=max(pick,notpick);
+   }
   public:
     int cutRod(int price[], int n) {
         //code here
-        int sum=0;
-        for(int i=0;i<n;i++)sum+=price[i];
-        vector<vector<int>>dp(n,vector<int>(sum+1,-1));
-        return fun(price,n-1,n,dp);
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+        return combination(price,dp,n,n-1);
     }
 };
 
