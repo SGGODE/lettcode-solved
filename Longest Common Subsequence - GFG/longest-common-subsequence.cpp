@@ -8,29 +8,24 @@ using namespace std;
 
 class Solution
 {
-    private:
-     int sub(int i1,int i2,string s1,string s2,vector<vector<int>>&dp){
-        //  if(i1==0||i2==0){
-        //      if(s1[i1]==s2[i2])return 1;
-        //      return 0;
-        //  }
-        if(i1<0||i2<0)return 0;
-        if(dp[i1][i2]!=-1)return dp[i1][i2];
-        // int same=0,notsame=0,notsame2=0;
-         if(s1[i1]==s2[i2]){
-             return 1+sub(i1-1,i2-1,s1,s2,dp);
-         }
-        // if(s1[i1]!=s2[i2]){
-           return  dp[i1][i2]=0+max(sub(i1-1,i2,s1,s2,dp),sub(i1,i2-1,s1,s2,dp));
-         //}
-         //return max(same,max(notsame,notsame2));
-     }//
     public:
     //Function to find the length of longest common subsequence in two strings.
-    int lcs(int x, int y, string s1, string s2){
+    int lcs(int x, int y, string s1, string s2)
+    {
         // your code here
-        vector<vector<int>>dp(x,vector<int>(y,-1));
-        return sub(x-1,y-1,s1,s2,dp);
+        int n=s1.size();
+        int m=s2.size();
+        vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(s1[i-1]==s2[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return dp[n][m];
     }
 };
 
