@@ -1,45 +1,38 @@
 class Solution {
 public:
     vector<string> summaryRanges(vector<int>& nums) {
-        vector<pair<int,int>>v; vector<string>result;
-        if(nums.size()==0)return result;
-        int prev=nums[0];
-        int curr=nums[0];
-        if(nums.size()==1){
-            result.push_back(to_string(nums[0]));
-            return result;
-        }
-         if(nums.size()==2){
-            if(nums[0]+1!=nums[1]){
-                result.push_back(to_string(nums[0]));
-                result.push_back(to_string(nums[1]));
-            }else{
-             string s=to_string(nums[0]);
-                s.append("->");
-                s.append(to_string(nums[1]));
-                result.push_back(s);
-            }
-            return result;
-        }
+        if(nums.empty())return {};
+        vector<string>res;
+       long long int start=nums[0];
+       long long int end=-1;
         int n=nums.size();
         for(int i=1;i<n;i++){
-           if(nums[i-1]+1!=nums[i]){
-               v.push_back({prev,nums[i-1]});
-               prev=nums[i];
-           }
-        }
-        v.push_back({prev,nums.back()});
-        for(auto it:v){
-          //  cout<<it.first<<""<<it.second<<" ";
-            if(it.first==it.second){
-                result.push_back(to_string(it.first));
+            if(nums[i]-1==nums[i-1]){
+                continue;
             }else{
-                string s=to_string(it.first);
-                s.append("->");
-                s.append(to_string(it.second));
-                result.push_back(s);
+                end=nums[i-1];
+                if(start==end){
+                    res.push_back(to_string(start));
+                }
+                else{
+                string x=to_string(end);
+                string s=to_string(start);
+                s.push_back('-');s.push_back('>');
+                s.append(x);
+                    res.push_back(s);
+                }
+                start=nums[i];
+                end=-1;
             }
-        }//cout<<endl;
-        return result;;
+        }
+        if(start==nums[n-1])res.push_back(to_string(start));
+        else{
+            string x=to_string(nums[n-1]);
+                string s=to_string(start);
+                s.push_back('-');s.push_back('>');
+                s.append(x);
+                    res.push_back(s);
+        }
+        return res;
     }
 };
