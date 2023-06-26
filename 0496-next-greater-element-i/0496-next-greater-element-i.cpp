@@ -9,8 +9,10 @@ public:
         }
         vector<int>res(m,-1);
         for(int i=0;i<m;i++){
-            for(int j=mp[nums1[i]]+1;j<n;j++){
-                if(nums2[j]>nums1[i]){
+            bool flag=0;
+            for(int j=0;j<n;j++){
+                if(nums2[j]==nums1[i])flag=1;
+                if(flag&&nums2[j]>nums1[i]){
                     res[i]=nums2[j];
                     break;
                 }
