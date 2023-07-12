@@ -1,99 +1,105 @@
 class Solution {
 private:
-//     void dfs(vector<int>adj[],vector<bool>&vis,unordered_map<int,int>&mp,int src,bool&flag,int start){
-//       queue<int>pq;
-//       pq.push(src);
-//       while(!pq.empty()){
-//           if(adj[pq.top()].empty()){
-//               pq.pop();
-//               flag=1;
-//           }else{
-              
-//           }
-//       }  
-//     }
-     // void dfs(vector<int>adj[],vector<bool>&vis,int src,bool&flag){
-     //    if(vis[src])return;
-     //    vis[src]=1;
-     //    for(auto it:adj[src]){
-     //        if(vis[it]){
-     //            flag=1;
-     //        }
-     //        dfs(adj,vis,it,flag);
-     //    }
-     //    vis[src]=0;
-//     //}
-//      bool dfs(vector<int> adj[],int node,vector<bool>&arr,vector<int>&stack){
-//       stack[node]=1;
-    
-//     //  if(!arr[node]){
-//           arr[node]=1;
-//           for(auto it:adj[node]){
-//               if(!arr[it])dfs(adj,it,arr,stack);
-//               //  return 1;
-//               if(stack[it])
-//                 return 1;
-//           }
-//     //  }
-//      stack[node]=0;
-//     return 0;
-// }
+    void dfs(vector<int>&dp,vector<int>adj[],vector<bool>&vis,int node,unordered_map<int,int>&mp,bool&flag){
+        vis[node]=1;
+        //ut<<"call "<<node<<endl;
+        if(mp.count(node)){
+            vis[node]=0;
+            return;
+        }
+        if(flag){
+           //out<<"last "<<node<<endl;
+            dp[node]=0;
+            vis[node]=0;
+            return;
+        }
+        for(auto&it:adj[node]){
+            if(flag){
+                dp[node]=0;
+                return;
+            }
+            if(!vis[it]){
+                dfs(dp,adj,vis,it,mp,flag);
+            }
+            if(vis[it]&&mp.find(it)==mp.end()){
+               //out<<"parent and node "<<it<<" "<<node<<endl;
+                dp[it]=0;dp[node]=0;
+                flag=1;
+            }
+        }
+        if(flag)dp[node]=0;
+        vis[node]=0;
+    }
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n=graph.size();
-       // vector<int>res;
-        vector<int>adj[n+1];
+        // vector<int>outcomes(n,0);
+        // for(int i=0;i<n;i++){
+        //     outcomes[i]+=graph[i].size();
+        // }
+        // vector<int>adj[n+1];
+        // for(int i=0;i<n;i++){
+        //     for(auto&it:graph[i]){
+        //         adj[i].push_back(it);
+        //     }
+        // }
+        // vector<int>terminal; vector<int>dp(n+1,-1);
+        // unordered_map<int,int>mp;vector<bool>vis(n+1,0);
+        // for(int i=0;i<n;i++){
+        //     if(outcomes[i]==0){
+        //         terminal.push_back(i);
+        //         dp[i]=1;
+        //        // vis[i]=1;
+        //         mp[i]++;
+        //     }
+        // }
+        // for(int i=0;i<n;i++){
+        //     if(outcomes[i]!=0){
+        //         bool flag=0;
+        //         if(dp[i]==0)continue;
+        //        if(dp[i]==-1){
+        //         // cout<<"I am calling "<<i<<endl;
+        //            dfs(dp,adj,vis,i,mp,flag);
+        //            if(!flag){
+        //             dp[i]=1;
+        //             terminal.push_back(i);
+        //             mp[i]++;
+        //         }else dp[i]=0;
+        //            continue;
+        //        }
+        //        if(dp[i]){
+        //            terminal.push_back(i);
+        //            //continue;
+        //        }
+        //     }
+        // }
+        // for(auto&it:dp)cout<<it<<" ";
+        // cout<<endl;
+        // sort(terminal.begin(),terminal.end());
+        // return terminal;
+        vector<int>income(n+1,0);vector<int>adj[n+1];
         for(int i=0;i<n;i++){
-            if(!graph[i].empty()){
-            for(auto it:graph[i]){
+             for(auto&it:graph[i]){
                 adj[it].push_back(i);
-              }
             }
         }
-      //   // for(int i=0;i<n;i++){
-      //   //     for(auto it:adj[i])cout<<it<<" ";
-      //   //     cout<<endl;
-      //   // }
-      //   unordered_map<int,int>mp;
-      //   for(int i=0;i<n;i++){
-      //       if(graph[i].empty()){
-      //           res.push_back(i);
-      //           mp[i]++;
-      //          // cout<<i<<endl;
-      //       }
-      //   }
-      // //  cout<<adj[4].size()<<endl;
-      //    vector<bool>vis(n,0);
-      //    vector<int>stack(n,0);
-      //   for(int i=0;i<n;i++){
-      //       if(adj[i].empty()){
-      //          continue;
-      //       }else{
-      //           int cnt=0;
-      //           bool flag=0;
-      //           if(dfs(adj,i,vis,stack)){
-      //               res.push_back(i);
-      //           }
-      //       }
-      //   }
-      //   sort(res.begin(),res.end());
-      //   return res;
-       vector<int>indegre(n,0);
         for(int i=0;i<n;i++){
-            for(auto it:adj[i])indegre[it]++;
+            for(auto&it:adj[i]){
+                income[it]++;
+            }
         }
         queue<int>pq;
         for(int i=0;i<n;i++){
-            if(indegre[i]==0)pq.push(i);
+            if(income[i]==0)pq.push(i);
         }
         set<int>s;
         while(!pq.empty()){
-           int temp=pq.front();
+            int node=pq.front();
             pq.pop();
-            s.insert(temp);
-            for(auto it:adj[temp]){
-                --indegre[it];
-                if(indegre[it]==0)pq.push(it);
+            s.insert(node);
+            for(auto&it:adj[node]){
+                --income[it];
+                if(income[it]==0)pq.push(it);
             }
         }
         vector<int>res(s.begin(),s.end());
