@@ -1,30 +1,30 @@
 class Solution {
 public:
-    bool canFinish(int n, vector<vector<int>>& pre) {
+    bool canFinish(int n, vector<vector<int>>&nums) {
         vector<int>adj[n+1];
-        for(int i=0;i<pre.size();i++){
-            adj[pre[i][1]].push_back(pre[i][0]);
+        for(int i=0;i<nums.size();i++){
+            adj[nums[i][1]].push_back(nums[i][0]);
         }
         vector<int>income(n,0);
         for(int i=0;i<n;i++){
-            for(auto it:adj[i])income[it]++;
+            for(auto&it:adj[i]){
+                income[it]++;
+            }
         }
         queue<int>pq;
         for(int i=0;i<n;i++){
             if(income[i]==0)pq.push(i);
         }
-        vector<int>res;
+        set<int>s;
         while(!pq.empty()){
-            int temp=pq.front();
+            int node=pq.front();
             pq.pop();
-            res.push_back(temp);
-            for(auto it:adj[temp]){
+            s.insert(node);
+            for(auto&it:adj[node]){
                 --income[it];
-                if(income[it]==0){
-                    pq.push(it);
-                }
+                if(income[it]==0)pq.push(it);
             }
         }
-        return res.size()==n;
+        return s.size()==n;
     }
 };
