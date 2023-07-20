@@ -6,10 +6,6 @@ public:
             if(s.empty()){
                 s.push(nums[i]);
             }else{
-                if(s.top()>0&&nums[i]<0&&abs(nums[i])==s.top()){
-                    s.pop();
-                    continue;
-                }
                 if((s.top()>0&&nums[i]<0)){
                     bool flag=0;
                     while(!s.empty()&&s.top()<=abs(nums[i])&&s.top()>0&&!flag){
