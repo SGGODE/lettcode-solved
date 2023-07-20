@@ -12,7 +12,7 @@ public:
                         if(s.top()>=abs(nums[i]))flag=1;
                         s.pop();
                     }
-                    if(!s.empty()&&s.top()>=abs(nums[i]))flag=1;
+                    if(!s.empty()&&s.top()>abs(nums[i]))flag=1;
                     if(!flag)s.push(nums[i]);
                 }else{
                     s.push(nums[i]);
