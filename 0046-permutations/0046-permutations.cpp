@@ -8,7 +8,7 @@ private:
         for(int i=index;i<nums.size();i++){
            swap(nums[index],nums[i]);
            sub(res,nums,index+1);
-            swap(nums[index],nums[i]);
+           swap(nums[index],nums[i]);
         }
     }
 public:
