@@ -31,10 +31,10 @@ class Solution(object):
         return 1
 
     def isStrictlyPalindromic(self, n):
-        for x in range(2, n - 1):  
-            if not self.check(str(bin(x)[2:])): 
-                print(str(bin(x)[2:]))
-                return False
-        return True  
+        # for x in range(2, n - 1):  
+        #     if not self.check(str(bin(x)[2:])): 
+        #         print(str(bin(x)[2:]))
+        #         return False
+        return False  
 
         
