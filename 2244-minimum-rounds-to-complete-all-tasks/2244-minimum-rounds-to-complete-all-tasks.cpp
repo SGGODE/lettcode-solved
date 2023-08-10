@@ -1,41 +1,26 @@
 class Solution {
-public:
-    int minimumRounds(vector<int>& tasks) {
-      map<int,int>mp;
-        for(auto it:tasks)mp[it]++;
-       set<int>s(tasks.begin(),tasks.end());
-        int cnt=0;
-        for(auto it:s){
-            //cout<<mp[it]<<endl;
-            if(mp[it]>=2){
-              int x=mp[it];
-              if(x%3==0){
-                  cnt+=(x/3);
-                 // cout<<"cnt "<<cnt<<endl;
-                  //continue;
-              }else if(x%2==0){
-                 // cout<<"hi 2"<<endl;
-                 int dump=0;int dcnt=0;
-                  while(dump<=x){
-                      dump=dump+3;
-                      ++dcnt;
-                  }
-                  //dump-=3;
-                  cnt+=dcnt;
-                 // cout<<dcnt<<" "<<cnt<<endl;
-                  //continue;
-              }else{
-                  int dump=0;int dcnt=0;
-                  while(dump<=x){
-                      dump=dump+3;
-                      ++dcnt;
-                  }
-                  //dump-=3;
-                  cnt+=dcnt;
-                 // cout<<dcnt<<" "<<cnt<<endl;
-              }
-            }else return -1;
+private:
+    int sub(vector<int>&dp,vector<int>&res,int index){
+       if(index==res.size()-1)return 1e9;
+       if(index>=res.size())return 0; 
+       if(index+1<res.size()&&res[index]!=res[index+1])return 1e9;
+       int ans=0;
+       if(dp[index]!=-1)return dp[index];
+       if(index+1<res.size()&&res[index]==res[index+1]){
+              ans=1+sub(dp,res,index+2);
         }
-        return cnt;
+       if(index+2<res.size()&&(res[index]==res[index+1])&&(res[index]==res[index+2])){
+           ans=min(ans,1+sub(dp,res,index+3));
+       }
+      return dp[index]=ans;
+}
+public:
+    int minimumRounds(vector<int>&res) {
+      int n = res.size();
+      if(n==1)return -1;
+      vector<int>dp(n,-1);
+      sort(res.begin(),res.end());
+      int result = sub(dp,res,0);
+      return result>=1e9?-1:result;
     }
 };
