@@ -1,32 +1,25 @@
 class Solution {
 private:
-    int n,m;
-    int path(vector<vector<int>>&dp,vector<vector<int>>&grid,int i,int j){
-        if(i<n&&j<m&&grid[i][j]==1)return 0;
-        if(i==n-1&&j==m-1)return 1;
-        if(i>=n||j>=m)return 0;
-        if(dp[i][j]!=-1)return dp[i][j];
-        int left=path(dp,grid,i+1,j);
-        int right=path(dp,grid,i,j+1);
-        return dp[i][j]=left+right;
+    int mod=2*1e9;
+    int sub(vector<vector<int>>&nums,vector<vector<int>>&dp,int row,int col){
+        if(row>=nums.size()||col>=nums[0].size())return 0;
+        if(nums[row][col]==1)return 0;
+        if(row==nums.size()-1&&col==nums[0].size()-1)return 1;
+        if(dp[row][col]!=-1)return dp[row][col];
+        int left = sub(nums,dp,row,col+1);
+        int down = sub(nums,dp,row+1,col);
+        return dp[row][col]=(left+down)%mod;
     }
 public:
-    int uniquePathsWithObstacles(vector<vector<int>>&grid) {
-        n=grid.size();
-        m=grid[0].size();
-        if(n==1&&m==1&&grid[0][0]==0)return 1;
-        if(n==1&&m==1&&grid[0][0]==1)return 0;
+    int uniquePathsWithObstacles(vector<vector<int>>&nums) {
+        int n = nums.size();
+        int m = nums[0].size();
+        if(nums[0][0]==1||nums[n-1][m-1]==1)return 0;
+        if(n==1&&m==1&&nums[0][0]==0)return 1;
+        if(n==1&&m==1&&nums[0][0]==1)return 0;
         vector<vector<int>>dp(n,vector<int>(m,-1));
-        // for(auto it:dp){
-        //     for(auto vt:it)cout<<vt<<" ";
-        //     cout<<endl;
-        // }
-        path(dp,grid,0,0);
-        //  for(auto it:dp){
-        //     for(auto vt:it)cout<<vt<<" ";
-        //     cout<<endl;
-        // }
-        if(dp[0][0]==-1)return 0;
-        return dp[0][0];
+        sub(nums,dp,0,0);
+        return dp[0][0]==-1?0:dp[0][0];
+       // return dp[0][0];
     }
 };
