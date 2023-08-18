@@ -6,24 +6,20 @@ public:
             adj[times[i][0]].push_back({times[i][1],times[i][2]});
         }
         vector<int>res(n+1,1e9);
+        queue<int>pq;
+        pq.push(k);
         res[k]=0;
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
-        pq.push({0,k});
         while(!pq.empty()){
-            int node=pq.top().second;
-            int dist=pq.top().first;
+            int node=pq.front();
             pq.pop();
-            for(auto it:adj[node]){
-                if(res[it.first]>dist+it.second){
-                    res[it.first]=dist+it.second;
-                    pq.push({it.second+dist,it.first});
+            for(auto&it:adj[node]){
+                if(res[node]+it.second<res[it.first]){
+                    res[it.first]=res[node]+it.second;
+                    pq.push(it.first);
                 }
             }
         }
-        res[0]=-1;
-        for(int i=1;i<=n;i++){
-            if(res[i]==1e9)return -1;
-        }
-        return *max_element(res.begin(),res.end());
+        int time = *max_element(res.begin()+1,res.end());
+        return time==1e9?-1:time;
     }
 };
