@@ -1,36 +1,30 @@
 class Solution {
 public:
-    int bestClosingTime(string customers) {
-         int index=0;int n=customers.size();
-        // vector<int>v(n),x(n);
-        // int cnt=0;
-        // for(int i=0;i<n;i++){
-        //    if(customers[i]=='N')++cnt;
-        //    v[i]=cnt;
-        // }cnt=0;
-        // for(int i=n-1;i>=0;i--){
-        //    if(customers[i]=='Y')++cnt;
-        //    x[i]=cnt;
-        // }
-        // for(int i=;i<n;i++){
-        //     int temp=v[i-1]+x[i];
-        //     if(temp<mincnt){
-        //         index=i;
-        //         mincnt=temp;
-        //     }
-        // }
-        // return index;
-        int cnt=0;//int micnt=0;
-        for(int i=0;i<n;i++){
-            if(customers[i]=='Y')cnt++;
+    int bestClosingTime(string nums) {
+        int n = nums.size();
+        vector<int>psum,nsum;
+        int psu=0,nsu=0;
+        for(auto&it:nums){
+            if(it=='Y')++psu;
+            else ++nsu;
+            psum.push_back(psu);
+            nsum.push_back(nsu);
         }
-         int mincnt=cnt;
-        for(int i=0;i<n;i++){
-            if(customers[i]=='N')++cnt;
-            else --cnt;
-            if(cnt<mincnt){
-                mincnt=cnt;
-                index=i+1;
+        int minp=INT_MAX;
+        int index=-1;
+        for(int i=0;i<=nums.size();i++){
+            if(i>=1){
+                int lost = nsum[i-1];
+                lost+=psum[n-1]-psum[i-1];
+                if(lost<minp){
+                    minp=lost;
+                    index=i;
+                }
+            }else{
+                if(psum[n-1]<minp){
+                    minp=psum[n-1];
+                    index=0;
+                }
             }
         }
         return index;
