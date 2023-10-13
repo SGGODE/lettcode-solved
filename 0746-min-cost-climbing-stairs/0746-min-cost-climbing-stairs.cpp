@@ -1,21 +1,20 @@
 class Solution {
 private:
-    int fun(vector<int>&cost,int index,vector<int>&dp){
-        if(index==cost.size()+1||index==cost.size()){
-            return 0;
-        }
-        if(index==cost.size()-1){
-            return cost[index];
-        }
+    int dp[1001];
+    int sub(vector<int>&nums,int index){
+        if(index>=nums.size())return 0;
         if(dp[index]!=-1)return dp[index];
-        int one=cost[index]+fun(cost,index+1,dp);
-        int two=cost[index]+fun(cost,index+2,dp);
-        return dp[index]=min(one,two);
+        int ans = 1e9;
+        if(index==0){
+             ans = min(ans,min(nums[index]+sub(nums,index+1),min(nums[index]+sub(nums,index+2),sub(nums,index+1))));
+        }else{
+            ans = min(ans,min(nums[index]+sub(nums,index+1),nums[index]+sub(nums,index+2)));
+        }
+        return dp[index]=ans;
     }
 public:
     int minCostClimbingStairs(vector<int>& cost) {
-        int n=cost.size();
-        vector<int>dp(n+1,-1);
-        return min(fun(cost,0,dp),fun(cost,1,dp));
+        memset(dp,-1,sizeof(dp));
+        return sub(cost,0);
     }
 };
