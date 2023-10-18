@@ -4,28 +4,32 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
+private:
+  int dp[100001][4];
+  int sub(vector<vector<int>>&points,int last,int index){
+      if(index==points.size())return 0;
+      if(dp[index][last]!=-1)return dp[index][last];
+      int ans = 0;
+      if(last==0){
+          ans = max(ans,max({points[index][0]+sub(points,1,index+1),points[index][1]+sub(points,2,index+1),
+                             points[index][2]+sub(points,3,index+1)}));
+      }else if(last==1){
+          ans = max(ans,max(points[index][1]+sub(points,2,index+1),
+                             points[index][2]+sub(points,3,index+1)));
+      }else if(last==2){
+          ans = max(ans,max(points[index][0]+sub(points,1,index+1),
+                             points[index][2]+sub(points,3,index+1)));
+      }else{
+          ans = max(ans,max(points[index][1]+sub(points,2,index+1),
+                             points[index][0]+sub(points,1,index+1)));
+      }
+      return dp[index][last]=ans;
+  }
   public:
     int maximumPoints(vector<vector<int>>& points, int n) {
         // Code here
-        vector<vector<int>>res(n,vector<int>(3,0));
-        for(int i=0;i<1;i++){
-            for(int j=0;j<3;j++){
-                res[i][j]=points[i][j];
-            }
-        }
-        for(int i=1;i<n;i++){
-          for(int m=0;m<3;m++){
-            int maxcnt=INT_MIN;
-            for(int j=i-1;j<i;j++){
-                for(int k=0;k<3;k++){
-                  if(k==m)continue;
-                  maxcnt=max(maxcnt,res[j][k]);
-                }
-            }
-            res[i][m]=points[i][m]+maxcnt;
-          }
-        }
-        return *max_element(res[n-1].begin(),res[n-1].end());
+        memset(dp,-1,sizeof(dp));
+        return sub(points,0,0);
     }
 };
 
