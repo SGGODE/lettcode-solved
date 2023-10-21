@@ -11,21 +11,15 @@
  */
 class Solution {
 private:
-    bool check(TreeNode* root0,TreeNode* root1){
-       if(root0==NULL&&root1==NULL)return 1;
-       if(!root0||!root1)return 0;
-       // if(root0->left->val != root1->right->val)return 0;
-       // if(root0->right->val!=root1->left->val)return 0;
-      // if(root0->val!=root1->val)return 0;
-       // check(root0->left,root1->right);
-       // check(root0->right,root1->left);
-       return (root0->val==root1->val)&&check(root0->left,root1->right)&&check(root0->right,root1->left);
+    bool sub(TreeNode*root1,TreeNode*root2){
+        if(root1==NULL&&root2==NULL)return 1;
+        if((root1!=NULL&&root2==NULL)||(root1==NULL&&root2!=NULL))return 0;
+        if(root1->val!=root2->val)return 0;
+        //cout<<root1->val<<" "<<root2->val<<endl;
+        return sub(root1->left,root2->right)&&sub(root1->right,root2->left);
     }
 public:
     bool isSymmetric(TreeNode* root) {
-        if(root==NULL){
-            return 1;
-        }
-       return check(root->left,root->right);
+        return sub(root->left,root->right);
     }
 };
