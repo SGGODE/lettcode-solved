@@ -14,31 +14,27 @@ public:
     vector<int> largestValues(TreeNode* root) {
         if(root==NULL)return {};
         vector<int>res;
-        vector<int>temp;
         queue<TreeNode*>pq;
         pq.push(root);
-        TreeNode* vx= new TreeNode(4294967296);
-        pq.push(vx);
+        TreeNode* temp = new TreeNode(INT_MAX);
+        pq.push(temp);
+        int val = INT_MIN;
         while(!pq.empty()){
-            TreeNode* curr=pq.front();
-            pq.pop();
-            bool flag=0;
-            if(pq.front()==vx){
-                flag=1;
-                pq.pop();
+            TreeNode* node = pq.front();
+            pq.pop();bool flag = 0;
+            if(pq.front()==temp)flag=1;
+            val = max(val,node->val);
+            if(node->left){
+                pq.push(node->left);
             }
-            temp.push_back(curr->val);
-            if(curr->left){
-                pq.push(curr->left);
-            }
-            if(curr->right){
-                pq.push(curr->right);
+            if(node->right){
+                pq.push(node->right);
             }
             if(flag){
-                int m=*max_element(temp.begin(),temp.end());
-                res.push_back(m);
-                temp.clear();
-                pq.push(vx);
+                pq.pop();
+                pq.push(temp);
+                res.push_back(val);
+                val=INT_MIN;
             }
         }
         return res;
