@@ -1,39 +1,29 @@
 class Solution {
 public:
     int maxFrequency(vector<int>& nums, int k) {
-        int mod=1e9+7;
-       int cnt=INT_MIN;
-        int n=nums.size();
-        sort(nums.begin(),nums.end());
-        // for(int i=0;i<n;i++){
-        //     if(i>=1){
-        //         int j=i-1;int temp=k;
-        //         while(j>=0&&temp!=0&&nums[i]-nums[j]<=temp){
-        //             temp=temp -(nums[i]-nums[j]);
-        //             --j;
-        //         }
-        //         cnt=max(cnt,(i-j));
+        // sort(nums.begin(),nums.end());
+        // int len = 0;
+        // for(int i=0;i<nums.size();i++){
+        //     int fcnt = 0, fk = k;
+        //     int j = i;
+        //     for(;j>=0&&fk>=0;j--){
+        //         if(abs(nums[i]-nums[j])<=fk)fk-=abs(nums[i]-nums[j]);
+        //         else{++j;break;}
         //     }
+        //     if(j==-1)len = max(len,i+1);
+        //     else len=max(len,(i-j));
         // }
-        int l=0;
-        int r=0;
-        long long int total=0;
-        while(l<n&&r<n){
-            total=(long long)total+nums[r];
-            long long temp=(long long)nums[r]*((r-l)+1);
-            if(temp<=total+k){
-                cnt=max(cnt,(r-l)+1);
-                 r++;
-            }else{
-                 long long temp=(long long)nums[r]*((r-l)+1);
-               while(!(temp<=total+k)&&l<r){
-                   total-=nums[l];
-                   ++l;
-                   temp=(long long)nums[r]*((r-l)+1);
-               }
-                r++;
+        // return len;
+        sort(nums.begin(), nums.end());
+        long int i = 0, j = 0, sum = 0, l = 0, tsum = 0;
+        for (i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            while ((i - j + 1) * nums[i] - sum > k) {
+                sum -= nums[j];
+                j++;
             }
+            l = max(l, i - j + 1);
         }
-        return cnt;
+        return l;
     }
 };
