@@ -3,14 +3,10 @@ private:
   //APPROACH:
     //  in this approach we compare the no of unique charter before the after the current position
     // if possible then we cut the string at that location if not then continue
- //dp to store.
- int dp[100001];
 //helper function who workk on it.
  int sub(int index,vector<int>&prefix,vector<int>&sufix,int n){
     //any way no more cut possible at last position or end.
        if(index==n||index==n-1)return 0;
-    //if the state already begin calculate.
-       // if(dp[index]!=-1)return dp[index];
     //store current state both possibility if possible cut or don't cut.
         int ans = 0;
     //possibility if possible cut it.
@@ -18,12 +14,10 @@ private:
     //don't cut it.
         ans += sub(index+1,prefix,sufix,n);
     //finally store the result.
-    return dp[index]=ans;
+    return ans;
  }
 public:
     int numSplits(string s) {
-        //intilize dp.
-        memset(dp,-1,sizeof(dp));
         //size of string.
         int n = s.size();
         //prefix no of unique `char` array. 
