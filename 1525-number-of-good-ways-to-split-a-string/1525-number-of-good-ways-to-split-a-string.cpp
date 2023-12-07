@@ -1,5 +1,8 @@
 class Solution {
 private:
+  //APPROACH:
+    //  in this approach we compare the no of unique charter before the after the current position
+    // if possible then we cut the string at that location if not then continue
  //dp to store.
  int dp[100001];
 //helper function who workk on it.
@@ -7,7 +10,7 @@ private:
     //any way no more cut possible at last position or end.
        if(index==n||index==n-1)return 0;
     //if the state already begin calculate.
-        if(dp[index]!=-1)return dp[index];
+       // if(dp[index]!=-1)return dp[index];
     //store current state both possibility if possible cut or don't cut.
         int ans = 0;
     //possibility if possible cut it.
