@@ -1,61 +1,33 @@
 class Solution {
-private:
-    int n,m;
-    int countrowone(vector<vector<int>>& grid,int i,int j){
-        int cnt=0;
-        for(int k=0;k<m;k++){
-            if(grid[i][k]==1)cnt++;
-        }
-        return cnt;
-    }
-    int countcolone(vector<vector<int>>& grid,int i,int j){
-        int cnt=0;
-        for(int k=0;k<n;k++){
-            if(grid[k][j]==1)cnt++;
-        }
-        return cnt;
-    }
-    int countrowzero(vector<vector<int>>& grid,int i,int j){
-          int cnt=0;
-        for(int k=0;k<m;k++){
-            if(grid[i][k]==0)cnt++;
-        }
-        return cnt;
-    }
-    int countcolzero(vector<vector<int>>& grid,int i,int j){
-          int cnt=0;
-        for(int k=0;k<n;k++){
-            if(grid[k][j]==0)cnt++;
-        }
-        return cnt;
-    }
 public:
     vector<vector<int>> onesMinusZeros(vector<vector<int>>& grid) {
-         n=grid.size();
-         m=grid[0].size();
-        vector<int>rowone(n),colone(m),rowzero(n),colzero(m);
-        vector<vector<int>>diff(n,vector<int>(m,-1));
-        for(int i=0;i<n;i++){
-            int zero=0,one=0;
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==0)zero++;
-                else one++;
+        map<int,pair<int,int>>row,col;
+        for(int i=0;i<grid.size();i++){
+            int z = 0,o = 0;
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]==1)++o;
+                else z++;
             }
-            rowone[i]=one;
-            rowzero[i]=zero;
+            row[i]={o,z};
         }
-        for(int i=0;i<m;i++){
-            int zero=0,one=0;
-            for(int j=0;j<n;j++){
-                if(grid[j][i]==0)zero++;
-                else one++;
+        for(int i=0;i<grid[0].size();i++){
+            int z = 0,o = 0;
+            for(int j=0;j<grid.size();j++){
+                if(grid[j][i]==1)++o;
+                else z++;
             }
-            colone[i]=one;
-            colzero[i]=zero;
+            col[i]={o,z};
         }
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                diff[i][j] =rowone[i]+colone[j]-rowzero[i]-colzero[j];
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>>diff(n,vector<int>(m,0));
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                int onesRow = row[i].first;
+                int onesCol = col[j].first;
+                int zeroRow = row[i].second;
+                int zeroCol = col[j].second;
+                diff[i][j]=((onesRow+onesCol)-(zeroRow+zeroCol));
             }
         }
         return diff;
