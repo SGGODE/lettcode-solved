@@ -1,24 +1,15 @@
 class Solution {
 public:
     int maxWidthOfVerticalArea(vector<vector<int>>& points) {
-        // int len = 0;
-        // int lenend = 0;
-        // for(auto&it:points){
-        //     len = min(len,min(it[0],it[1]));
-        //     lenend =  max(lenend,max(it[0],it[1]));
-        // }
-        vector<int>res;
-        map<int,int>mp;
+        vector<int>Y_axis_points;
         for(auto&it:points){
-            res.push_back(it[0]);
-            mp[it[0]]=it[1];
+            Y_axis_points.push_back(it[0]);
         }
-        sort(res.begin(),res.end());
+        sort(Y_axis_points.begin(),Y_axis_points.end());
         int len = 0;
-        for(int i=1;i<res.size();i++){
-            int length = (res[i]-res[i-1]);
-            int breath = abs(mp[res[i]]-mp[res[i-1]]);
-            len = max(len,(length));
+        for(int i=1;i<Y_axis_points.size();i++){
+            int length = (Y_axis_points[i]-Y_axis_points[i-1]);
+            len = max(len,length);
         }
         return len;
     }
