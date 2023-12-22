@@ -2,9 +2,8 @@ class Solution {
 public:
     int maxScore(string s) {
         if(s.size()==2){
-            if(s[0]=='0'&&s[1]=='0')return 1;
+            if((s[0]=='0'&&s[1]=='0')||(s[0]=='1'&&s[1]=='1'))return 1;
             if(s[0]=='0'&&s[1]=='1')return 2;
-            if(s[0]=='1'&&s[1]=='1')return 1;
             if(s[0]=='1'&&s[1]=='0')return 0;
         }
         int cntone = 0;
