@@ -19,7 +19,6 @@ private:
 public:
     int numRollsToTarget(int n, int k, int target) {
         memset(dp,-1,sizeof(dp));
-        //cout<<1<<endl;
         return sub(n,k,target);
     }
 };
