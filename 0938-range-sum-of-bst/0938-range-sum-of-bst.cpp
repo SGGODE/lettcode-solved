@@ -11,21 +11,15 @@
  */
 class Solution {
 private:
-    void inorder(vector<int>&v,TreeNode* root){
-        if(root==NULL)return;
-        inorder(v,root->left);
-        v.push_back(root->val);
-        inorder(v,root->right);
+    void sub(TreeNode* root,int&low,int&high,int&sum){
+         if(root->val>=low&&root->val<=high)sum+=root->val;
+         if(root->left)sub(root->left,low,high,sum);
+         if(root->right)sub(root->right,low,high,sum);
     }
 public:
     int rangeSumBST(TreeNode* root, int low, int high) {
-        vector<int>v;
-        inorder(v,root);int sum=0;
-        for(auto it:v){
-            //cout<<it<<" ";cout<<endl;
-            if(it<low||it>high)continue;
-            sum+=it;
-        }
+        int sum = 0;
+        sub(root,low,high,sum);
         return sum;
     }
 };
