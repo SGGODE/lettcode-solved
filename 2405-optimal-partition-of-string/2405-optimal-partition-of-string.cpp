@@ -1,19 +1,18 @@
 class Solution {
 public:
     int partitionString(string s) {
-        int cnt=0;
-        string x;
-        for(int i=0;i<s.size();i++){
-              size_t found = x.find(s[i]);
-            if(found != string::npos){
-                ++cnt;
-                x.clear();
-                x.push_back(s[i]);
+        int cnt = 0;
+        set<char>mp;
+        for(auto&it:s){
+            if(mp.count(it)){
+                cnt += 1;
+                mp.clear();
+                mp.insert(it);
             }else{
-                x.push_back(s[i]);
+                mp.insert(it);
             }
         }
-        if(!x.empty())++cnt;
+        if(!mp.empty())cnt+=1;
         return cnt;
     }
 };
