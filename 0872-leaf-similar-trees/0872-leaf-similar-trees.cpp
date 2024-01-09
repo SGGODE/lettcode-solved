@@ -11,21 +11,17 @@
  */
 class Solution {
 private:
-    void call(TreeNode* root,vector<int>&v){
-        if(root==NULL)return;
-        if(!root->right&&!root->left){
-            v.push_back(root->val);
-        }
-        call(root->left,v);
-        call(root->right,v);
+    void sub(TreeNode* root,vector<int>&leaf){
+         if(root==NULL)return;
+         if(!root->left&&!root->right)leaf.push_back(root->val);
+         sub(root->left,leaf);
+         sub(root->right,leaf);
     }
 public:
     bool leafSimilar(TreeNode* root1, TreeNode* root2) {
-        vector<int>v;
-        call(root1,v);
-        vector<int>x;
-        call(root2,x);
-        //for(auto it:v)cout<<it<<" ";
-        return x==v;
+        vector<int>seq1,seq2;
+        sub(root1,seq1);
+        sub(root2,seq2);
+        return seq1==seq2;
     }
 };
