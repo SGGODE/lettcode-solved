@@ -11,43 +11,42 @@
  */
 class Solution {
 private:
-    int time(vector<int>adj[],int node){
+    int infection(vector<int>adj[],int start){
+        int time = 0;
         queue<pair<int,int>>pq;
-        pq.push({node,0});
-        vector<bool>vis(1e5+1,0);
-        vis[node]=1;
-        int maxtime = 0;
+        pq.push({start,time});
+        vector<bool>vis(100001,0);
+        vis[start]=1;
         while(!pq.empty()){
-            int cnode = pq.front().first;
-            int time = pq.front().second;
+            int node = pq.front().first;
+            int t = pq.front().second;
             pq.pop();
-            maxtime = max(maxtime,time);
-            for(auto&it:adj[cnode]){
+            time = max(time,t);
+            for(auto&it:adj[node]){
                 if(!vis[it]){
                     vis[it]=1;
-                    pq.push({it,time+1});
+                    pq.push({it,t+1});
                 }
             }
         }
-        return maxtime;
+        return time;
     }
-    void Convertthetree(TreeNode* root,vector<int>adj[]){
-       // if(root==NULL)return;
+    void Graph(TreeNode* root,vector<int>adj[]){
         if(root->left){
             adj[root->val].push_back(root->left->val);
             adj[root->left->val].push_back(root->val);
-            Convertthetree(root->left,adj);
+            Graph(root->left,adj);
         }
         if(root->right){
             adj[root->val].push_back(root->right->val);
             adj[root->right->val].push_back(root->val);
-            Convertthetree(root->right,adj);
+            Graph(root->right,adj);
         }
     }
 public:
     int amountOfTime(TreeNode* root, int start) {
         vector<int>adj[100001];
-        Convertthetree(root,adj);
-        return time(adj,start);
+        Graph(root,adj);
+        return infection(adj,start);
     }
 };
