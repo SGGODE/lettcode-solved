@@ -7,36 +7,24 @@ private:
         if(dp.count(res))return dp[res];
         int ans = 0;
         ans = max(ans,sub(arr,st,s,index+1));
-        if(!st.empty()){
-            bool flag = 1;
-            for(auto&it:arr[index]){
-                if(st.count(it)){
-                    flag=0;
-                    break;
-                }
+        bool flag = 1;
+        set<char>sz;
+        for(auto&it:arr[index]){
+            if(st.count(it)||sz.count(it)){
+                flag=0;
+                break;
             }
-            if(flag){
-                set<char>sp(st);
-                string temp(s);bool f=1;
-                for(auto&it:arr[index]){
-                    if(sp.count(it)){f=0;break;}
-                    sp.insert(it);
-                }
-               if(f){temp.append(arr[index]);
-                int len = arr[index].size();
-                ans = max(ans,len+sub(arr,sp,temp,index+1));}
-            }
-        }else{
-             set<char>sp(st);
-                string temp(s);bool f=1;
-                for(auto&it:arr[index]){
-                    if(sp.count(it)){f=0;break;}
-                    sp.insert(it);
-                }
-               if(f){temp.append(arr[index]);
-                int len = arr[index].size();
-                ans = max(ans,len+sub(arr,sp,temp,index+1));}
+            sz.insert(it);
         }
+        if(flag){
+            set<char>sp(st);
+            sp.insert(sz.begin(),sz.end());
+            string temp(s);
+            temp.append(arr[index]);
+            int len = arr[index].size();
+            ans = max(ans,len+sub(arr,sp,temp,index+1));
+        }
+
         return dp[res]=ans;
     }
 public:
