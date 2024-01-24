@@ -12,21 +12,16 @@
 class Solution {
 private:
     bool check(int count[]){
-	// int count[256] = { 0 };
-	// for (int i = 0; str[i]; i++)
-	// 	count[str[i]]++;
-
 	int odd = 0;
-	for (int i = 0; i < 256; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (count[i] & 1)
 			odd++;
 
 		if (odd > 1)
 			return false;
 	}
-
 	return true;
-}
+ }
    int sub(TreeNode* root,int arr[]){
        int ans = 0;
        arr[root->val]++;
@@ -48,7 +43,7 @@ private:
 public:
     int pseudoPalindromicPaths (TreeNode* root) {
         string s;
-        int arr[256];
+        int arr[10];
         return sub(root,arr);
     }
 };
