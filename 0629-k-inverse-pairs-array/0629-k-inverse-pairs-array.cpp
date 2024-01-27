@@ -10,21 +10,18 @@ private:
     }
 public:
   int kInversePairs(int n, int k) {
-         int f[k + 1];
-        int s[k + 2];
-        memset(f, 0, sizeof(f));
-        f[0] = 1;
-        fill(s, s + k + 2, 1);
-        s[0] = 0;
-        const int mod = 1e9 + 7;
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 1; j <= k; ++j) {
-                f[j] = (s[j + 1] - s[max(0, j - (i - 1))] + mod) % mod;
-            }
-            for (int j = 1; j <= k + 1; ++j) {
-                s[j] = (s[j - 1] + f[j - 1]) % mod;
+         int mod = 1000000007;
+        if (k > n*(n-1)/2 || k < 0) return 0;
+        vector<vector<long long>> dp(n+1, vector<long long>(k+1, 0));
+        for (int i = 1; i <= n; i++) {
+            dp[i][0] = 1;
+            if (i + 1 <= n) dp[i + 1][0] = 1;
+            for (int j = 1; j <= min(k, i*(i-1)/2); j++) {
+                dp[i][j] = dp[i][j-1] + dp[i-1][j];
+                if (j >= i) dp[i][j] -= dp[i-1][j-i];
+                dp[i][j] = (dp[i][j]+mod) % mod;
             }
         }
-        return f[k];
+        return (int) dp[n][k];
   }
 };
