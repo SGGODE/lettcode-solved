@@ -1,49 +1,37 @@
 class MyQueue {
 public:
+    stack<int>st;
     MyQueue() {
         
     }
-    //queue<int>pq;
-    stack<int>s;
+    
     void push(int x) {
-      // pq.push(x); 
-        s.push(x);
+        st.push(x);
     }
+    
     int pop() {
-       //  int x=pq.front();
-       //  pq.pop();
-       // return x;
-        stack<int>dump(s); vector<int>v;
-      while(!dump.empty()){
-          v.push_back(dump.top());
-          dump.pop();
-      }
-        reverse(v.begin(),v.end());
-       // dump.clear();
-        for(int i=1;i<v.size();i++)dump.push(v[i]);
-      //  s.clear();
-        while(!s.empty()){
-         // v.push_back(dump.top());
-          s.pop();
-      }
-        s=dump;
-        return v[0];
+        stack<int>sp;
+        while(st.size()>1){
+            sp.push(st.top());
+            st.pop();
+        }
+        int top = st.top();
+        st.pop();
+        while(!sp.empty()){
+            st.push(sp.top());
+            sp.pop();
+        }
+        return top;
     }
     
     int peek() {
-        stack<int>dump(s);
-        vector<int>v;
-      while(!dump.empty()){
-          v.push_back(dump.top());
-          dump.pop();
-      }reverse(v.begin(),v.end());
-        return v[0];
-       // return pq.front();
+        stack<int>sp(st);
+        while(sp.size()>1)sp.pop();
+        return sp.top();
     }
     
     bool empty() {
-       // return pq.empty();
-        return s.empty();
+        return st.empty();
     }
 };
 
