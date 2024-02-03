@@ -1,20 +1,20 @@
 class Solution {
 private:
-    int sub(vector<vector<int>>&dp,vector<int>&arr,int start,int end,int k){
-        if(start==end)return 0;
-        if(dp[start][end]!=-1)return dp[start][end];
-        int ans = INT_MIN;
-        int m = 0;
-        for(int i = start;i<(start+k)&&i<end;i++){
-            m = max(m,arr[i]);
-            ans=max(ans,(m*((i-start)+1)+sub(dp,arr,i+1,end,k)));
+    int dp[501];
+    int sub(vector<int>& arr,int index,int k){
+        if(index==arr.size())return 0;
+        if(dp[index]!=-1)return dp[index];
+        int ans = 0;
+        int msum = 0;
+        for(int i=index;i<index+k&&i<arr.size();i++){
+            msum=max(msum,arr[i]);
+            ans = max(ans,(msum*((i-index)+1))+sub(arr,i+1,k));
         }
-        return dp[start][end]=ans;
+        return dp[index]=ans;
     }
 public:
     int maxSumAfterPartitioning(vector<int>& arr, int k) {
-        int n = arr.size();
-        vector<vector<int>>dp(n,vector<int>(n+1,-1));
-        return sub(dp,arr,0,n,k);
+        memset(dp,-1,sizeof(dp));
+        return sub(arr,0,k);
     }
 };
