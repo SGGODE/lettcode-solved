@@ -1,45 +1,33 @@
+#include <vector>
+#include <algorithm>
+
 class Solution {
 public:
-    vector<int> largestDivisibleSubset(vector<int>& nums) {
-      int n=nums.size();
-      vector<int>dp(n,0);
-        sort(nums.begin(),nums.end());
-        vector<int>hash(n,-1);
-        for(int i=0;i<n;i++){
-            int curr=-1;
-            int index=-1;
-            for(int j=i-1;j>=0;j--){
-                if(j<curr)break;
-                if((nums[i]%nums[j]==0&&dp[j]>curr) or (nums[j]%nums[i]==0&&dp[j]>curr)){
-                    curr=dp[j];
-                    index=j;
+    std::vector<int> largestDivisibleSubset(std::vector<int>& nums) {
+        int n = nums.size();
+        std::sort(nums.begin(), nums.end());
+        std::vector<int> count(n, 1);
+        std::vector<int> pre(n, -1);
+        int max = 0, index = -1;
+        for (int i = 0; i < n; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (nums[i] % nums[j] == 0) {
+                    if (1 + count[j] > count[i]) {
+                        count[i] = count[j] + 1;
+                        pre[i] = j;
+                    }
                 }
             }
-            if(curr==-1){
-                dp[i]=1;
-            }
-            else{
-                dp[i]=curr+1;
-                hash[i]=index;
+            if (count[i] > max) {
+                max = count[i];
+                index = i;
             }
         }
-      //  for(auto&it:hash)cout<<it<<" ";
-        int maxindex=-1,maxlen=-1;
-        for(int i=0;i<n;i++){
-            if(maxlen<dp[i]){
-                maxlen=dp[i];
-                maxindex=i;
-            }
+        std::vector<int> res;
+        while (index != -1) {
+            res.push_back(nums[index]);
+            index = pre[index];
         }
-        if(maxlen==1)return {nums[0]};
-        vector<int>res;
-        for(int j=maxindex;j>=0;){
-            res.push_back(nums[j]);
-            if(hash[j]!=-1){j=hash[j];}
-           // ++j;
-            else break;
-        }
-        reverse(res.begin(),res.end());
         return res;
     }
 };
