@@ -10,9 +10,8 @@ public:
         sort(res.begin(),res.end());
         for(int i=0;i<res.size()&&k!=0;i++){
             if(k>=res[i].first){
-                int x = res[i].first; 
+                k -= res[i].first; 
                 res[i].first=0;
-                k-=x;
             }else{
                 res[i].first=(res[i].first-k);
                 k=0;
