@@ -1,17 +1,17 @@
 class Solution {
 public:
     string customSortString(string order, string s) {
-        map<char,int>mp;
-        for(auto&it:s)mp[it]++;
+        int mp[26]={0};
+        for(auto&it:s)mp[it-'a']++;
         string result;
         for(auto&it:order){
-            if(mp.count(it)){
-                for(int i=0;i<mp[it];i++)result.push_back(it);
-                mp.erase(it);
+            if(mp[it-'a']!=0){
+                for(int i=0;i<mp[it-'a'];i++)result.push_back(it);
+                mp[it-'a']=0;
             }
         }
-        for(auto&it:mp){
-            for(int i=0;i<it.second;i++)result.push_back(it.first);
+        for(int i=0;i<26;i++){
+            for(int j=0;j<mp[i]&&mp[i]!=0;j++)result.push_back(i+'a');
         }
         return result;
     }
