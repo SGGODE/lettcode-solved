@@ -3,30 +3,19 @@ public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
         intervals.push_back(newInterval);
         sort(intervals.begin(),intervals.end());
-        vector<int>v;
-        int j=0;
-        for(auto it:intervals){
-            cout<<it[0]<<" "<<it[1]<<" ";
-        }cout<<endl;
-        for(int i=0;i<intervals.size();i++){
-            if(i==0){
-                v.push_back(intervals[i][0]);
-                v.push_back(intervals[i][1]);
-                j+=2;
-            }else{
-                if(intervals[i][0]>v[j-1]){
-                   // cout<<v[i-1]<<endl;
-                    v.push_back(intervals[i][0]);
-                    v.push_back(intervals[i][1]);
-                    j+=2;
-                }else{
-                    v[j-1]=max(intervals[i][1],v[j-1]);
-                }
-            }
-        }
         vector<vector<int>>result;
-        for(int i=0;i<v.size();i+=2){
-            result.push_back({v[i],v[i+1]});
+        result.push_back({intervals[0][0],intervals[0][1]});
+        int j = 0;
+        for(int i=1;i<intervals.size();i++){
+            int start = result[j][0];
+            int end = result[j][1];
+            if(intervals[i][0]<=end){
+                result[j][0]=min(result[j][0],intervals[i][0]);
+                result[j][1]=max(result[j][1],intervals[i][1]);
+            }else{
+                result.push_back({intervals[i][0],intervals[i][1]});
+                j++;
+            }
         }
         return result;
     }
