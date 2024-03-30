@@ -28,12 +28,13 @@ public:
         // int sum = 0;
         // bool pos = 0;
         // for(auto&it:possible){
-        //     sum+=it;
+        //     if(it==1)sum+=it;
+        //     else sum-=1;
         //     if(sum>0)pos=1;
         // }
         // if(!pos)return -1;
         // int csum = 0;
-        // for(int i=0;i<possible.size();i++){
+        // for(int i=0;i<possible.size()-1;i++){
         //     csum+=possible[i];
         //     if(csum>(sum-csum))return i+1;
         // }
