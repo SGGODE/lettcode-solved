@@ -3,10 +3,11 @@ public:
     int lengthOfLastWord(string s) {
         stringstream ss(s);
         string word;
-        int cnt=0;
+        int len = 0;
         while(ss>>word){
-            ++cnt;
+            int x = word.size();
+            len = x;
         }
-        return word.size();
+        return len;
     }
 };
