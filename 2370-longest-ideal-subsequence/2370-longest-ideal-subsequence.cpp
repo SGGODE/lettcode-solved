@@ -1,4 +1,4 @@
-class Solution {
+class Solution{
 private:
     int dp[100001][27];
     int sub(string&s,map<char,int>&mp,int index,int lastval,int k){
