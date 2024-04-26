@@ -1,22 +1,26 @@
 class Solution {
 private:
-    int dp[201][201];
-    int sub(vector<vector<int>>& grid,int last,int row){
-        if(row==grid.size())return 0;
-        if(dp[row][last+1]!=-1)return dp[row][last+1];
-        int ans = 1e9;
-        for(int i=0;i<grid[0].size();i++){
-            if(last==-1){
-                ans = min(ans,grid[row][i]+sub(grid,i,row+1));
-            }else if(last!=-1&&last!=i){
-                 ans = min(ans,grid[row][i]+sub(grid,i,row+1));
-            }
-        }
-        return dp[row][last+1]=ans;
-    }
+   vector<vector<int>>dp;
+   int sub(vector<vector<int>>&grid,int row,int col){
+       if(row==grid.size())return 0;
+       if(dp[row][col+1]!=-1)return dp[row][col+1];
+       int ans = 1e9;
+       if(col==-1){
+           for(int i=0;i<grid[0].size();i++){
+               ans = min(ans,grid[row][i]+sub(grid,row+1,i));
+           }
+       }else{
+          for(int i=0;i<grid[0].size();i++){
+               if(i!=col)ans = min(ans,grid[row][i]+sub(grid,row+1,i));
+          } 
+       }
+       return dp[row][col+1]=ans;
+   }
 public:
     int minFallingPathSum(vector<vector<int>>& grid) {
-        memset(dp,-1,sizeof(dp));
-        return sub(grid,-1,0);
+        int n = grid.size();
+        int m = grid[0].size();
+        dp.resize(n,vector<int>(m+1,-1));
+        return sub(grid,0,-1);
     }
 };
