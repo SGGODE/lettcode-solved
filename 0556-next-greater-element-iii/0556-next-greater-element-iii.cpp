@@ -16,10 +16,8 @@ private:
     }
 public:
     int nextGreaterElement(int n) {
-         string x = to_string(n);
+        string x = to_string(n);
         long long int res = sub(x,0,n);
         return res>INT_MAX?-1:res;
-        // next_permutation(x.begin(),x.end());
-        // return (stoll(x)>INT_MAX||stoll(x)<n)?-1:stoll(x);
     }
 };
