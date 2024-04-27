@@ -10,12 +10,10 @@ private:
                ans = min(ans,(i+1)+sub(ring,key,(ind+i)%n,kind+1,n));
            } 
         }
-        int cnt = 1;
         for(int i=n-1;i>=0;i--){
            if(ring[(ind+i)%n]==key[kind]){
-               ans = min(ans,(cnt+1)+sub(ring,key,(ind+i)%n,kind+1,n));
+               ans = min(ans,((n-i)+1)+sub(ring,key,(ind+i)%n,kind+1,n));
            } 
-           ++cnt;
         }
         return dp[ind][kind]=ans;
     }
