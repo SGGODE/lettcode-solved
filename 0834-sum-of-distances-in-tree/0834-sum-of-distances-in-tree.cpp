@@ -1,76 +1,71 @@
-// My TLE one But best one \U0001f914\U0001f601\U0001f44d
 // class Solution {
 // private:
-//     void dfs(vector<int>adj[],vector<bool>&vis,int var,int &sum,int cnt){
-//         if(adj[var].empty())return;
-//         vis[var]=1;
-//         for(auto it:adj[var]){
+//     map<pair<int,int>,int>dp;
+//     void dfs(vector<int>adj[],vector<bool>&vis,int src,int par,int curr,int&dist){
+//         vis[src]=1;
+//         dp[{par+1,src+1}]=(dist+curr);
+//         dist+=curr;
+//         for(auto&it:adj[src]){
+//           //  if(dp.count({src+1,it+1})&&!vis[it]){dist+=dp[{src+1,it+1}];continue;}
 //             if(!vis[it]){
-//              sum+=cnt;
-//              dfs(adj,vis,it,sum,cnt+1);
+//                 dfs(adj,vis,it,src,curr+1,dist);
 //             }
-//         }
+//         } 
 //     }
 // public:
 //     vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
 //         vector<int>adj[n];
-//         for(int i=0;i<edges.size();i++){
-//             adj[edges[i][0]].push_back(edges[i][1]);
-//             adj[edges[i][1]].push_back(edges[i][0]);
+//         for(auto&it:edges){
+//             adj[it[0]].push_back(it[1]);
+//             adj[it[1]].push_back(it[0]);
 //         }
-//         // for(auto it:adj){
-//         //     for(auto vt:it)cout<<vt<<" ";
-//         //     cout<<endl;
-//         // }
-//         vector<int>res(n,0);
+//         vector<int>result;
 //         for(int i=0;i<n;i++){
-//             int sum=0;vector<bool>vis(n,0);
-//             dfs(adj,vis,i,sum,1);
-//             res[i]=sum;
+//             vector<bool>vis(n,0);
+//             int dist = 0;
+//             dfs(adj,vis,i,-1,0,dist);
+//             vis.clear();
+//             result.push_back(dist);
 //         }
-//         // for(auto it:res)cout<<it<<" ";
-//         // cout<<endl;
-//         return res;
+//         return result;
 //     }
 // };
-class Solution{
-    private:
-    vector<map<int, pair<int, int>>> graph;
+class Solution {
+	int n;
+	vector<list<int>> adjList;
+	vector<int> sz, val, ans;
 
-    int dfs(int i, int j){
-        if(j!=-1 && graph[j][i].first != -1)
-            return graph[j][i].first;
+	void dfs1(int node, int par) {
 
-        int sum = 0, count = 0;
-        for(auto p : graph[i]){
-            if(p.first != j){
-                sum += dfs(p.first, i);
-                int x = graph[i][p.first].second + 1;
+		for (int child : adjList[node]) {
+			if (child != par) {
+				dfs1(child, node);
+				sz[node] += sz[child];
+				val[node] += val[child] + sz[child];
+			}
+		}
+		sz[node]++;
+	}
 
-                sum += x;
-                count += x;
-            }
-        }
+	void dfs2(int node, int par, int dpVal) {
+		ans[node] = val[node] + dpVal + (n - sz[node]);
 
-        if(j != -1){
-            graph[j][i].first = sum;
-            graph[j][i].second = count;
-        }
-        return sum;
-    }
+		for (int child : adjList[node]) {
+			if (child != par)
+				dfs2(child, node, ans[node] - val[child] - sz[child]);
+		}
+	}
+    
 public:
-    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
-        vector<int> ans(n);
-        graph = vector<map<int, pair<int, int>>>(n);
-
-        for(auto ed : edges){
-            graph[ed[0]][ed[1]] = {-1,0};
-            graph[ed[1]][ed[0]] = {-1,0};
-        }
-
-        for(int i = 0; i<n; i++)
-            ans[i] = dfs(i, -1);
-
-        return ans;
-    }
+	vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
+		n = N;
+		adjList.resize(n), sz.resize(n), val.resize(n), ans.resize(n);
+		for (vector<int> &v : edges) {
+			adjList[v[0]].push_back(v[1]);
+			adjList[v[1]].push_back(v[0]);
+		}
+		dfs1(0, 0);
+		dfs2(0, 0, 0);
+		return ans;
+	}
 };
