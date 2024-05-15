@@ -6,30 +6,17 @@ private:
     }
     int sub(vector<vector<int>>&grid,int row,int col){
         int ans = grid[row][col];
-        if(check(row+1,col)&&grid[row+1][col]!=0){
+        int dx[4]={0,0,1,-1};
+        int dy[4]={1,-1,0,0};
+        for(int i=0;i<4;i++){
             int val = grid[row][col];
             grid[row][col]=0;
-            ans = max(ans,val+sub(grid,row+1,col));
+            if(check(row+dx[i],col+dy[i])&&grid[row+dx[i]][col+dy[i]]!=0){
+                ans = max(ans,val+sub(grid,row+dx[i],col+dy[i]));
+            }
             grid[row][col]=val;
         }
-        if(check(row-1,col)&&grid[row-1][col]!=0){
-            int val = grid[row][col];
-            grid[row][col]=0;
-            ans = max(ans,val+sub(grid,row-1,col));
-            grid[row][col]=val;
-        }
-        if(check(row,col+1)&&grid[row][col+1]!=0){
-            int val = grid[row][col];
-            grid[row][col]=0;
-            ans = max(ans,val+sub(grid,row,col+1));
-            grid[row][col]=val;
-        }
-        if(check(row,col-1)&&grid[row][col-1]!=0){
-            int val = grid[row][col];
-            grid[row][col]=0;
-            ans = max(ans,val+sub(grid,row,col-1));
-            grid[row][col]=val;
-        }
+        
         return ans;
     }
 public:
