@@ -1,38 +1,33 @@
 class Solution {
 private:
-bool compare(map<char,int>&mp,map<char,int>&mx){
-    for(auto&it:mp){
-       if(!(mx.count(it.first)&&it.second<=mx[it.first])){
-         return 0;
-       }
+bool compare(unordered_map<char,int>&pattern,unordered_map<char,int>&substr){
+    for(auto&it:pattern){
+       if(!(substr.count(it.first)&&it.second<=substr[it.first]))return 0;
     }
   return 1;
 }
 public:
     string minWindow(string str, string arr) {
         int n = str.size();
-          map<char,int>mp;
-          for(auto&it:arr)mp[it]++;
-          int j = 0;
-          int len = INT_MAX;
-          int targeti=-1,targetj=-1;
-          map<char,int>mx;
-          for(int i=0;i<n;i++){
-             mx[str[i]]++;
-             while(compare(mp,mx)&&j<=i){
+        unordered_map<char,int>pattern;
+        for(auto&it:arr)pattern[it]++;
+        int j = 0 , len = INT_MAX;
+        int windowend=-1 , windowstart=-1;
+        unordered_map<char,int>substr;
+        for(int i=0;i<n;i++){
+            substr[str[i]]++;
+            while(compare(pattern,substr)&&j<=i){
                 if(len>(i-j)+1){
                    len = (i-j)+1;
-                   targeti=i;
-                   targetj=j;
+                   windowstart=j,windowend=i;
                 }
-                --mx[str[j]];
-                if(mx[str[j]]==0)mx.erase(str[j]);
+                --substr[str[j]];
+                if(substr[str[j]]==0)substr.erase(str[j]);
                 j++;
              }
-          }
-          string x;
-          if(targeti!=-1&&targetj!=-1)for(int i=targetj;i<=targeti;i++)x.push_back(str[i]);
-          return x.empty()?"":x;
-
+        }
+        string result="";
+        if(windowstart!=-1)for(int i=windowstart;i<=windowend;i++)result.push_back(str[i]);
+        return result;
     }
 };
