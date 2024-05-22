@@ -1,31 +1,32 @@
 class Solution {
 private:
-    bool check_palindrome(string s,int index,int i){
-        int st=index;int e=i;
-        while(st<=e){
-            if(s[st++]!=s[e--])return 0;
+    vector<vector<string>>result;
+    bool check(string&s){
+        int n = s.size();
+        for(int i=0;i<n/2;i++){
+            if(s[i]!=s[n-i-1])return 0;
         }
         return 1;
     }
-    void the_helper(vector<vector<string>>&result,vector<string>&dump,string s,int n,int index){
-        if(index==n){
-            result.push_back(dump);
+    void sub(string&s,vector<string>&res,int index){
+        if(index==s.size()){
+            result.push_back(res);
             return;
         }
-        for(int i=index;i<n;i++){
-            if(check_palindrome(s,index,i)){
-                dump.push_back(s.substr(index,i-index+1));
-                the_helper(result,dump,s,n,i+1);
-                dump.pop_back();
+        string substr;
+        for(int i=index;i<s.size();i++){
+            substr.push_back(s[i]);
+            if(check(substr)){
+                res.push_back(substr);
+                sub(s,res,i+1);
+                res.pop_back();
             }
         }
     }
 public:
     vector<vector<string>> partition(string s) {
-      vector<vector<string>>result;
-      vector<string>dump;
-      int n=s.size();
-      the_helper(result,dump,s,n,0);
-      return result;
+        vector<string>res;
+        sub(s,res,0);
+        return result;
     }
 };
