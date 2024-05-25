@@ -4,7 +4,6 @@ private:
     void sub(string&s,unordered_map<string,int>&words,string breakedString,int index){
         if(index==s.size()){
             breakedString.pop_back();
-            //cout<<"yes"<<endl;
             result.push_back(breakedString);
             return;
         }
