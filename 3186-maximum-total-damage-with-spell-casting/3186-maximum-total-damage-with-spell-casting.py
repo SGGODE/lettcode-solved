@@ -44,3 +44,37 @@ class Solution:
         
         answer = self.sub(power, count, s, 0, False)
         return answer
+# class Solution {
+# private:
+#     vector<long long>dp;
+#     long long sub(vector<int>&power,unordered_map<int,int>&count,set<pair<int,int>>&s,int index,int start){
+#         if(index==power.size())return 0;
+#         if(dp[index]!=-1)return dp[index];
+#         long long ans = power[index]*count[power[index]];
+#         if(!start){
+#             ans = max(ans,sub(power,count,s,index+1,0));
+#             auto it = s.lower_bound({power[index]+3,numeric_limits<int>::min()});
+#             if(it!=s.end())ans = max(ans,power[index]*count[power[index]]+sub(power,count,s,it->second,1));
+#         }else{
+#             auto it = s.lower_bound({power[index]+3,numeric_limits<int>::min()});
+#             if(it!=s.end())ans = max(ans,power[index]*count[power[index]]+sub(power,count,s,it->second,1));
+#         }
+#         return dp[index]=ans;
+#     }
+# public:
+#     long long maximumTotalDamage(vector<int>& power) {
+#         int n = power.size();
+#         dp.resize(n,-1);
+#         sort(power.begin(),power.end());
+#         unordered_map<int,int>count;
+#         set<pair<int,int>>s;
+#         int index = 0;
+#         for(auto&it:power){
+#           count[it]++;
+#           if(count[it]==1)s.insert({it,index});
+#           ++index;
+#         }
+#         long long answer = 0;
+#         return sub(power,count,s,0,0);
+#     }
+# };
