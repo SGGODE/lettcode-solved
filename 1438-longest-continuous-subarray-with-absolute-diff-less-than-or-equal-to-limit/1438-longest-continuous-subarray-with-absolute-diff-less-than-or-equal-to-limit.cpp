@@ -1,20 +1,27 @@
 class Solution {
 public:
     int longestSubarray(vector<int>& nums, int limit) {
-        int len=0;
         int n = nums.size();
-        for(int i=0;i<n;i++){
-            if(len>=(n-i))return len;
-            int j=i;int m=nums[i];int mx=nums[i];
-            while(j<n&&abs(m-mx)<=limit){
-                ++j;
-                if(j<n){
-                    m=min(nums[j],m);
-                    mx=max(nums[j],mx);
-                }
+        int j = 0;
+        unordered_map<int,int>freq;
+        set<int>s;
+        int mlen = 0;
+        for(int i = 0; i < n; i++){
+            freq[nums[i]]++;
+            s.insert(nums[i]);
+            auto it = s.begin() , vt = s.end();
+            --vt;
+            int start = *it , end = *vt;
+            while((end - start) > limit){
+                --freq[nums[j]];
+                if(freq[nums[j]]==0)s.erase(nums[j]);
+                j++;
+                auto it = s.begin() , vt = s.end();
+                --vt;
+                start = *it , end = *vt;
             }
-            len=max(len,(j-i));
+            mlen = max(mlen,(i-j)+1);
         }
-        return len;
+        return mlen;
     }
 };
