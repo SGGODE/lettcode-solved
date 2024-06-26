@@ -22,7 +22,7 @@ private:
          if(start==end){
              return new TreeNode(inOrder[end]);
          }
-         int m = end < 2 ? end : (start+end)/2;
+         int m = (start+end)/2;
          TreeNode* root = new TreeNode(inOrder[m]);
          root->left = Tree(inOrder,start,m-1);
          root->right = Tree(inOrder,m+1,end);
