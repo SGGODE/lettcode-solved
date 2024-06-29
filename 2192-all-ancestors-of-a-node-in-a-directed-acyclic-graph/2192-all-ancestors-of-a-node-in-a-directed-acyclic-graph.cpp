@@ -1,33 +1,43 @@
 class Solution {
-private:
-    void dfs(vector<int>adj[],vector<bool>&vis,set<int>&s,int src){
-        //s.insert(src);
-        vis[src]=1;
-        for(auto&it:adj[src]){
-            if(!vis[it]){
-                s.insert(it);
-                dfs(adj,vis,s,it);
-            }
-        }
-    }
+
 public:
     vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
-        vector<vector<int>>res;
+        vector<int>indegree(n);
         vector<int>adj[n];
-        for(int i=0;i<edges.size();i++){
-            adj[edges[i][1]].push_back(edges[i][0]);
+        for(auto&it:edges){
+            indegree[it[1]]++;
+            adj[it[0]].push_back(it[1]);
         }
-        for(int i=0;i<n;i++){
-            if(!adj[i].empty()){
-                set<int>s;
-                vector<bool>vis(n,0);
-                dfs(adj,vis,s,i);
-                vector<int>temp(s.begin(),s.end());
-                res.push_back(temp);
-            }else{
-                res.push_back({});
+        queue<int>pq;
+        vector<set<int>>result(n);
+        for(int i = 0; i < n ; i++){
+            if(indegree[i]==0){
+                pq.push(i);
             }
         }
-        return res;
+        while(!pq.empty()){
+            int size = pq.size();
+            for(int i = 0 ; i < size ; i++){
+                int node = pq.front();
+                pq.pop();
+                for(auto &it : adj[node]){
+                    --indegree[it];
+                    set<int>resit = result[it],resnode = result[node];
+                    resit.insert(resnode.begin(),resnode.end());
+                    result[it]=resit;
+                    result[it].insert(node);
+                    if(indegree[it]==0)pq.push(it);
+                }
+            }
+        }
+        vector<vector<int>>finalAncestors(n);
+        for(int i = 0; i < n ;i++){
+            set<int> s = result[i];
+            vector<int> vec(s.begin(),s.end());
+            finalAncestors[i] = vec;
+            // for(auto&it:s)cout<<it<<" ";
+            // cout<<endl;
+        }
+        return finalAncestors;
     }
 };
