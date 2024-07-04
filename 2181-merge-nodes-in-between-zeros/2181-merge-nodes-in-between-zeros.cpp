@@ -11,26 +11,26 @@
 class Solution {
 public:
     ListNode* mergeNodes(ListNode* head) {
-        int sum=0;
-        vector<int>res;
-        ListNode* temp=head;
-        temp=temp->next;
+        ListNode* runner = NULL;
+        ListNode* newHead;
+        bool flag = 1;
+        ListNode* temp = head->next;
+        int sum = 0;
         while(temp!=NULL){
-            if(temp->val!=0){
-                sum+=temp->val;
-            }else{
-                res.push_back(sum);
-                sum=0;
-            }
-            temp=temp->next;
+            if(temp->val==0){
+                if(!flag){
+                    runner->next = new ListNode(sum);
+                    runner = runner->next;
+                }else{
+                    runner = new ListNode(sum);
+                    newHead = runner;
+                    flag=0;
+                }
+                sum = 0;
+            }else sum += temp->val;
+            
+            temp = temp->next;
         }
-        if(res.empty())return NULL;
-        head=new ListNode(res[0]);
-        temp=head;
-        for(int i=1;i<res.size();i++){
-            temp->next=new ListNode(res[i]);
-            temp=temp->next;
-        }
-        return head;
+        return newHead;
     }
 };
