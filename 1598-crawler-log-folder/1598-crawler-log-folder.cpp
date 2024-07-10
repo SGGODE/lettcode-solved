@@ -1,7 +1,6 @@
 class Solution {
 public:
     int minOperations(vector<string>& logs) {
-        unordered_map<string , int>fileindex;
         int level = 0;
         for(auto & it : logs){
             if(it == "../"){
