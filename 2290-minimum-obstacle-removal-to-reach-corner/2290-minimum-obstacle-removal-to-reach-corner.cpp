@@ -1,3 +1,35 @@
+// class Solution {
+// private:
+//     int n,m;
+//     bool check(int r,int c){
+//         return r >= 0 && c >= 0 
+//                && r < n && c < m;
+//     }
+//     int sub(vector<vector<int>> & grid ,vector<vector<bool>> & vis, int r , int c){
+//         if(r == n-1 && c == m-1)return 0;
+//         vis[r][c] = 1;
+//         int ans = 1e9;
+//         int dx[4] = {0 , 0 , -1 , 1};
+//         int dy[4] = {-1 , 1 , 0 , 0};
+//         for(int i = 0; i < 4; i++){
+//             if(check(r + dx[i] , c + dy[i])&& !vis[r + dx[i]][c + dy[i]]){
+//                 if(grid[r + dx[i]][c + dy[i]]){
+//                     ans = min(ans , 1 + sub(grid , vis , r + dx[i] , c + dy[i]));
+//                 }else{
+//                     ans = min(ans , sub(grid , vis , r + dx[i] , c + dy[i]));
+//                 }
+//             }
+//         }
+//         vis[r][c] = 0;
+//         return ans;
+//     }
+// public:
+//     int minimumObstacles(vector<vector<int>>& grid) {
+//         n = grid.size() , m = grid[0].size();
+//         vector<vector<bool>>vis(n,vector<bool>(m,0));
+//         return sub(grid,vis,0,0);
+//     }
+// };
 class Solution {
 private:
     int n,m;
