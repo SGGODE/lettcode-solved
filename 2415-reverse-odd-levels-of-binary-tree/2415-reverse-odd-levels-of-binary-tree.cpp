@@ -11,59 +11,49 @@
  */
 class Solution {
 private:
-    void sub(TreeNode* root,vector<int>&store,int index){
-        if(((2*index)+1)>=store.size()&&((2*index)+2)>=store.size())return;
-        if(((2*index)+1)<store.size()){
-            root->left = new TreeNode(store[(2*index)+1]);
-            sub(root->left,store,(2*index)+1);
+    TreeNode* solve(TreeNode* root){
+       // vector<pair<int,vector<int>>>levels;
+        // 2 * i + 1  
+        vector<int>result;
+        queue<TreeNode*>pq;
+        pq.push(root);
+        int level = 0;
+        while(!pq.empty()){
+            vector<int>temp;
+            int size = pq.size();
+            for(int i = 0; i < size; i++){
+                TreeNode* node = pq.front();
+                pq.pop();
+                temp.push_back(node->val);
+                if(node->left)pq.push(node->left);
+                if(node->right)pq.push(node->right);
+            }
+            if(level%2)reverse(temp.begin() , temp.end());
+            for(auto&it:temp)result.push_back(it);
+            ++level;
         }
-        if(((2*index)+2)<store.size()){
-            root->right = new TreeNode(store[(2*index)+2]);
-            sub(root->right,store,(2*index)+2);
+        int sizeOfResult = result.size();
+        TreeNode* newRoot = new TreeNode(result[0]);
+        TreeNode* pointNewRoot = newRoot;
+        queue<pair<TreeNode*,int>>pqx;
+        pqx.push({newRoot , 0});
+        while(!pqx.empty()){
+            TreeNode* node = pqx.front().first;
+            int index = pqx.front().second;
+            pqx.pop();
+            if((2*index) + 1 < sizeOfResult){
+                node->left = new TreeNode(result[(2*index)+1]);
+                pqx.push({node->left , (2*index)+1});
+            }
+            if((2*index) + 2 < sizeOfResult){
+                node->right = new TreeNode(result[(2*index)+2]);
+                pqx.push({node->right , (2*index)+2});
+            }
         }
+        return pointNewRoot;
     }
 public:
     TreeNode* reverseOddLevels(TreeNode* root) {
-       // if(root==NULL)return root;
-        //sub(root,0);
-       // return root;
-        vector<vector<int>>res;
-        queue<TreeNode*>pq;
-        pq.push(root);
-        TreeNode* temp = new TreeNode(-1);
-        pq.push(temp);
-        vector<int>store;
-        int cnt = 0;
-        while(!pq.empty()){
-            TreeNode* node = pq.front();
-            pq.pop();
-            store.push_back(node->val);
-            if(node->left){
-                pq.push(node->left);
-            }
-            if(node->right){
-                pq.push(node->right);
-            }
-            if(pq.front()==temp){
-                pq.pop();
-                res.push_back(store);
-                store.clear();
-                pq.push(temp);
-            }
-        }
-        for(int i=0;i<res.size();i++){
-            if(i%2){
-                reverse(res[i].begin(),res[i].end());
-            }
-        }
-        store.clear();
-        for(int i=0;i<res.size();i++){
-            for(int j=0;j<res[i].size();j++){
-                store.push_back(res[i][j]);
-            }
-        }
-        TreeNode* love = new TreeNode(store[0]);
-        sub(love,store,0);
-        return love;
+        return solve(root);
     }
 };
